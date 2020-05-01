@@ -1,0 +1,3 @@
+# HELP Dummy Metrics.
+# TYPE dummy_metrics summary
+dummy_metrics{source="dummy-nginx"} 1
