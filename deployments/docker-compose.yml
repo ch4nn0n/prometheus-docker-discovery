@@ -1,43 +1,31 @@
 version: '3'
 
 services:
-
   prometheus:
     image: prom/prometheus:v2.13.1
+    restart: always
     volumes:
       - ./prometheus/:/etc/prometheus/
-#      - prometheus_data:/prometheus
-#    command:
-#      - '--config.file=/etc/prometheus/prometheus.yml'
-#      - '--storage.tsdb.path=/prometheus'
-#      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-#      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - endpoints:/etc/prometheus/targets/
     ports:
       - 9090:9090
-#    restart: always
 
-  web:
+  target:
     image: nginx
+    restart: always
     volumes:
       - ./nginx/content/:/etc/nginx/html:ro
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - 8080:80
+      - 8080:9090
     environment:
-      - NGINX_HOST=foobar.com
-      - NGINX_PORT=80
+      - NGINX_PORT=9090
     labels:
-      prometheus.docker.nginx.enabled: "true"
-      prometheus.docker.nginx.target.port: "6060"
-      prometheus.docker.nginx.target.path: "/metrics"
-      prometheus.docker.nginx.target.interval: "15s"
-      prometheus.docker.nginx.label.source: "docker"
+      prometheus.nginx.enabled: "true"
+      prometheus.nginx.target.port: "9090"
+      prometheus.nginx.target.path: "/metrics"
+      prometheus.nginx.target.interval: "15s"
+      prometheus.nginx.label.source: "docker"
 
-#    command: /bin/bash -c "envsubst < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
-
-#  docker-discovery:
-#    build: ../build/Dockerfile
-
-
-#volumes:
-#  logvolume01: {}
+volumes:
+  endpoints:
