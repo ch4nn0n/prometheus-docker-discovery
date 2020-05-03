@@ -9,6 +9,12 @@ services:
       - endpoints:/etc/prometheus/targets/
     ports:
       - 9090:9090
+    labels:
+      prometheus.target.enabled: "true"
+      prometheus.target.job: "prometheus"
+      prometheus.target.port: "9090"
+      prometheus.target.path: "/metrics"
+      prometheus.target.label.source: "docker"
 
   target:
     image: nginx
@@ -21,11 +27,25 @@ services:
     environment:
       - NGINX_PORT=9090
     labels:
-      prometheus.nginx.enabled: "true"
-      prometheus.nginx.target.port: "9090"
-      prometheus.nginx.target.path: "/metrics"
-      prometheus.nginx.target.interval: "15s"
-      prometheus.nginx.label.source: "docker"
+      prometheus.target.enabled: "true"
+      prometheus.target.job: "nginx"
+      prometheus.target.port: "9090"
+      prometheus.target.path: "/metrics"
+      prometheus.target.label.source: "docker"
+
+  discovery:
+    build:
+      context: ../
+      dockerfile: build/Dockerfile
+#    restart: always
+    volumes:
+      - endpoints:/etc/prometheus/targets/
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      prometheus.discovery.scrapeInterval: "15s"
+      prometheus.discovery.refreshInterval: "30m"
+      prometheus.discovery.logLevel: "debug"
+      prometheus.discovery.label.source: "docker"
 
 volumes:
   endpoints:

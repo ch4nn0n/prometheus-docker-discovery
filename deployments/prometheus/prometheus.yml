@@ -16,15 +16,15 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  - job_name: 'nginx'
-
-    # metrics_path defaults to '/metrics'
-    # scheme defaults to 'http'.
-
-    static_configs:
-      - targets: ['192.168.112.3:80']
+#  - job_name: 'nginx'
+#
+#    # metrics_path defaults to '/metrics'
+#    # scheme defaults to 'http'.
+#
+#    static_configs:
+#      - targets: ['192.168.112.3:80']
 
   - job_name: 'docker-targets'
     file_sd_configs:
       - files:
-          - 'targets.json'
+          - '/etc/prometheus/targets/docker-targets.json'
