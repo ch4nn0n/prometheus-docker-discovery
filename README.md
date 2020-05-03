@@ -10,21 +10,21 @@ The style of labeling takes inspiration from the Kubernetes service discovery me
 ### Prometheus Docker Discover
 Configuration for this application is service
 ```yaml
-prometheus.docker.discovery.enabled: "true"
-prometheus.docker.discovery.logLevel: "info"
-prometheus.docker.discovery.network: "<name>"
-prometheus.docker.discovery.label.<name>: "<value>"
-prometheus.docker.discovery.targetsFile: "<path_to_file>"
+prometheus.discovery.scrapeInterval: "15s"
+prometheus.discovery.refreshInterval: "1m"
+
+prometheus.discovery.logLevel: "info"
+prometheus.discovery.label.<name>: "<value>"
 ```
 
 ### Docker labels
 ```yaml
-prometheus.docker.<service>.enabled: "true"
-prometheus.docker.<service>.target.port: "6060"
-prometheus.docker.<service>.target.path: "/metrics"
-prometheus.docker.<service>.target.interval: "15s"
-prometheus.docker.<service>.label.<name>: "<value>"
-prometheus.docker.<service>.network: "<name>"
+prometheus.target.enabled: "true"
+prometheus.target.job: "<name>" 
+prometheus.target.port: "9090"
+prometheus.target.path: "/metrics"
+
+prometheus.target.label.<name>: "<value>"
 ```
 
 ### Prometheus configuration
